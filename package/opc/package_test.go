@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestPartAddRelationship(t *testing.T) {
+func TestPackageAddRelationship(t *testing.T) {
 	var part1, part2 *Part
 	part1 = &Part{}
 

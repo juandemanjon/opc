@@ -8,8 +8,9 @@ const (
 )
 
 type Relationship struct {
-	Target           *Part
-	RelationshipType string
-	TargetMode       TargetMode
-	Id               string
+	Target     *Part
+	TargetURI  string
+	Type       string
+	TargetMode TargetMode
+	ID         string
 }

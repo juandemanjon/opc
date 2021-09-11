@@ -1,15 +1,21 @@
 package opc
 
 import (
-	"archive/zip"
+	"encoding/xml"
+	"io/fs"
+
+	"github.com/juandemanjon/opc/package/opc/schema/sso/pkg/metadata/_2006/content_types"
 )
 
 type Package struct {
 	rsc rsContainer
+	ct  *content_types.CT_Types
 }
 
 func NewPackage() *Package {
-	return &Package{}
+	return &Package{
+		ct: content_types.NewCT_Types(),
+	}
 }
 
 func (p *Package) AddRelationship(target *Part, rsType string, targetMode TargetMode) (*Relationship, error) {
@@ -28,16 +34,12 @@ func (p *Package) relationshipsByType(type_ string) []*Relationship {
 	return p.rsc.RelationshipByType(type_)
 }
 
-const (
-	URI_PackageRels = "_rels/.rels"
-)
+func (p *Package) readRelationships(file fs.File, partName string) error {
+	return p.rsc.decodeRelationships(file, partName)
+}
 
-func (p *Package) readRelationships(r *zip.ReadCloser) error {
-	file, err := r.Open(URI_PackageRels)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	return p.rsc.decodeRelationships(file, URI_PackageRels)
+func (p *Package) readContentTypes(file fs.File) error {
+	p.ct = content_types.NewCT_Types()
+	err := xml.NewDecoder(file).Decode(p.ct)
+	return err
 }

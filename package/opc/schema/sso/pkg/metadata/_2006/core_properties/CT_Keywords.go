@@ -2,6 +2,10 @@ package core_properties
 
 import "encoding/xml"
 
+const (
+	w3_namespace = "http://www.w3.org/XML/1998/namespace"
+)
+
 type CT_Keywords struct {
 	LangAttr *string
 	Value    []*CT_Keyword
@@ -13,9 +17,8 @@ func NewCT_Keywords() *CT_Keywords {
 }
 
 func (m *CT_Keywords) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	// initialize to default
 	for _, attr := range start.Attr {
-		if attr.Name.Space == "http://www.w3.org/XML/1998/namespace" && attr.Name.Local == "lang" {
+		if attr.Name.Space == w3_namespace && attr.Name.Local == "lang" {
 			parsed, err := attr.Value, error(nil)
 			if err != nil {
 				return err

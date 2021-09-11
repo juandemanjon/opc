@@ -6,6 +6,11 @@ import (
 	"fmt"
 )
 
+const (
+	URI_PackageRels  = "_rels/.rels"
+	URI_ContentTypes = "[Content_Types].xml"
+)
+
 type PackageReader struct {
 	Filename string
 	r        *zip.ReadCloser
@@ -28,7 +33,21 @@ func (pr *PackageReader) Open() error {
 		return err
 	}
 	p := NewPackage()
-	p.readRelationships(r)
+
+	file, err := r.Open(URI_PackageRels)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	p.readRelationships(file, URI_PackageRels)
+
+	file, err = r.Open(URI_ContentTypes)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	p.readContentTypes(file)
+
 	pr.Package = p
 	pr.r = r
 	return nil

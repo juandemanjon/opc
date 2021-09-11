@@ -23,4 +23,11 @@ func TestPackageReader(t *testing.T) {
 	assert.NotNil(t, core.Keywords.Tags)
 	assert.Equal(t, "Tags1; Tags2", *core.Keywords.Tags)
 
+	p := reader.Package
+	reader = nil
+
+	ct := p.ct
+	assert.Equal(t, "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml", ct.Override[0].ContentType)
+	assert.Equal(t, "/word/document.xml", ct.Override[0].PartName)
+
 }

@@ -7,3 +7,7 @@ import (
 type CoreProperties struct {
 	core_properties.CT_CoreProperties
 }
+
+func NewCoreProperties() *CoreProperties {
+	return &CoreProperties{}
+}

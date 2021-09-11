@@ -24,6 +24,10 @@ func (p *Package) RelationshipByType(type_ string) []*Relationship {
 	return p.rsc.RelationshipByType(type_)
 }
 
+func (p *Package) relationshipsByType(type_ string) []*Relationship {
+	return p.rsc.RelationshipByType(type_)
+}
+
 const (
 	URI_PackageRels = "_rels/.rels"
 )
@@ -36,8 +40,4 @@ func (p *Package) readRelationships(r *zip.ReadCloser) error {
 	defer file.Close()
 
 	return p.rsc.decodeRelationships(file, URI_PackageRels)
-}
-
-func (p *Package) relationshipsByType(type_ string) []*Relationship {
-	return p.rsc.RelationshipByType(type_)
 }

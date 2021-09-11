@@ -4,13 +4,15 @@
     xmlns:dcterms="http://purl.org/dc/terms/"
     xmlns:dcmitype="http://purl.org/dc/dcmitype/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <dc:title></dc:title>
-    <dc:subject></dc:subject>
+    <dc:title>Title</dc:title>
+    <dc:subject>Subject</dc:subject>
     <dc:creator>Manjon, Juande</dc:creator>
-    <cp:keywords></cp:keywords>
-    <dc:description></dc:description>
+    <cp:keywords>Tags1; Tags2</cp:keywords>
+    <dc:description>Comments</dc:description>
     <cp:lastModifiedBy>Manjon, Juande</cp:lastModifiedBy>
     <cp:revision>2</cp:revision>
     <dcterms:created xsi:type="dcterms:W3CDTF">2021-09-08T15:02:00Z</dcterms:created>
     <dcterms:modified xsi:type="dcterms:W3CDTF">2021-09-08T15:02:00Z</dcterms:modified>
+    <cp:category>category1; category2</cp:category>
+    <cp:version>1.1</cp:version>
 </cp:coreProperties>

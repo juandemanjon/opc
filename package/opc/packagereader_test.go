@@ -19,5 +19,8 @@ func TestPackageReader(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, core)
 	assert.Equal(t, "Manjon, Juande", string(core.Creator.Data))
+	assert.NotNil(t, core.Keywords)
+	assert.NotNil(t, core.Keywords.Tags)
+	assert.Equal(t, "Tags1; Tags2", *core.Keywords.Tags)
 
 }

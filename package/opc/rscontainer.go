@@ -25,7 +25,10 @@ func (rsc *rsContainer) AddRelationship(target *Part, rsType string, targetMode 
 	if len(rsType) == 0 {
 		return nil, fmt.Errorf("relationship Type cannot be empty")
 	}
-	rs := &Relationship{Target: target, Type: rsType, TargetMode: targetMode}
+	rs := &Relationship{TargetPart: target, Type: rsType, TargetMode: targetMode}
+	if target != nil {
+		rs.TargetURI = target.Path
+	}
 	rsc.rss = append(rsc.rss, rs)
 	return rs, nil
 }

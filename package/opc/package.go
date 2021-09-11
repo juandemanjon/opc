@@ -8,34 +8,14 @@ import (
 )
 
 type Package struct {
-	rsc rsContainer
-	ct  *content_types.CT_Types
+	PartContainer
+	ct *content_types.CT_Types
 }
 
 func NewPackage() *Package {
 	return &Package{
 		ct: content_types.NewCT_Types(),
 	}
-}
-
-func (p *Package) AddRelationship(target *Part, rsType string, targetMode TargetMode) (*Relationship, error) {
-	return p.rsc.AddRelationship(target, rsType, targetMode)
-}
-
-func (p *Package) RelationshipCount() int {
-	return p.rsc.RelationshipCount()
-}
-
-func (p *Package) RelationshipByType(type_ string) []*Relationship {
-	return p.rsc.RelationshipByType(type_)
-}
-
-func (p *Package) relationshipsByType(type_ string) []*Relationship {
-	return p.rsc.RelationshipByType(type_)
-}
-
-func (p *Package) readRelationships(file fs.File, partName string) error {
-	return p.rsc.decodeRelationships(file, partName)
 }
 
 func (p *Package) readContentTypes(file fs.File) error {

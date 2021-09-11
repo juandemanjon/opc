@@ -30,4 +30,16 @@ func TestPackageReader(t *testing.T) {
 	assert.Equal(t, "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml", ct.Override[0].ContentType)
 	assert.Equal(t, "/word/document.xml", ct.Override[0].PartName)
 
+	rs := p.RelationshipsByType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument")
+	assert.NotEmpty(t, rs)
+	assert.Equal(t, "word/document.xml", rs[0].TargetURI)
+	document := rs[0].TargetPart
+	assert.Equal(t, "word/document.xml", document.Path)
+
+	rs = document.RelationshipsByType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable")
+	assert.NotEmpty(t, rs)
+	assert.Equal(t, "fontTable.xml", rs[0].TargetURI)
+	fontTable := rs[0].TargetPart
+	assert.Equal(t, "word/fontTable.xml", fontTable.Path)
+
 }

@@ -4,6 +4,7 @@ import (
 	"archive/zip"
 	"encoding/xml"
 	"fmt"
+	"path/filepath"
 )
 
 const (
@@ -39,7 +40,10 @@ func (pr *PackageReader) Open() error {
 		return err
 	}
 	defer file.Close()
-	p.readRelationships(file, URI_PackageRels)
+	err = p.readRelationships(file, URI_PackageRels)
+	if err != nil {
+		return err
+	}
 
 	file, err = r.Open(URI_ContentTypes)
 	if err != nil {
@@ -48,9 +52,30 @@ func (pr *PackageReader) Open() error {
 	defer file.Close()
 	p.readContentTypes(file)
 
-	pr.Package = p
 	pr.r = r
+
+	pr.readRelationships("", p.rsc.rss)
+
+	pr.Package = p
 	return nil
+}
+
+func (pr *PackageReader) readRelationships(parent string, rss []*Relationship) {
+	for _, rs := range rss {
+		if rs.TargetMode == InternalTarget {
+			if rs.TargetPart == nil {
+				uri := parent + rs.TargetURI
+				rs.TargetPart = NewPart(uri)
+				dir, filename := filepath.Split(uri)
+				rel := dir + "_rels/" + filename + ".rels"
+				file, err := pr.r.Open(rel)
+				if err == nil {
+					rs.TargetPart.readRelationships(file, rs.TargetURI)
+					pr.readRelationships(dir, rs.TargetPart.rsc.rss)
+				}
+			}
+		}
+	}
 }
 
 func (pr *PackageReader) Close() error {
@@ -69,7 +94,7 @@ const (
 )
 
 func (pr *PackageReader) GetCoreProperties() (*CoreProperties, error) {
-	rs := pr.Package.relationshipsByType(Relationship_CoreProperties)
+	rs := pr.Package.RelationshipsByType(Relationship_CoreProperties)
 	if len(rs) == 0 {
 		return nil, fmt.Errorf("cannot find core properties relationship with type '%s'", Relationship_CoreProperties)
 	}

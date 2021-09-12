@@ -40,7 +40,7 @@ func (pr *PackageReader) Open() error {
 		return err
 	}
 	defer file.Close()
-	err = p.readRelationships(file, URI_PackageRels)
+	err = p.decodeRelationships(file, URI_PackageRels)
 	if err != nil {
 		return err
 	}
@@ -54,7 +54,7 @@ func (pr *PackageReader) Open() error {
 
 	pr.r = r
 
-	pr.readRelationships("", p.rsc.rss)
+	pr.readRelationships("", p.rss)
 
 	pr.Package = p
 	return nil
@@ -70,8 +70,8 @@ func (pr *PackageReader) readRelationships(parent string, rss []*Relationship) {
 				rel := dir + "_rels/" + filename + ".rels"
 				file, err := pr.r.Open(rel)
 				if err == nil {
-					rs.TargetPart.readRelationships(file, rs.TargetURI)
-					pr.readRelationships(dir, rs.TargetPart.rsc.rss)
+					rs.TargetPart.decodeRelationships(file, rs.TargetURI)
+					pr.readRelationships(dir, rs.TargetPart.rss)
 				}
 			}
 		}

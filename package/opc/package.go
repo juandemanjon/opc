@@ -8,7 +8,7 @@ import (
 )
 
 type Package struct {
-	PartContainer
+	RelationshipContainer
 	ct *content_types.CT_Types
 }
 

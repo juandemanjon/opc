@@ -6,19 +6,11 @@ import (
 	"io"
 )
 
-type RelationshipContainer interface {
-	AddRelationship(target *Part, rsType string, targetMode TargetMode) (*Relationship, error)
-	// DeleteRelationship()
-	// DeleteRelationshipsByTarget()
-	RelationshipCount() int
-	RelationshipByType(string) []*Relationship
-}
-
-type rsContainer struct {
+type RelationshipContainer struct {
 	rss []*Relationship
 }
 
-func (rsc *rsContainer) AddRelationship(target *Part, rsType string, targetMode TargetMode) (*Relationship, error) {
+func (rsc *RelationshipContainer) AddRelationship(target *Part, rsType string, targetMode TargetMode) (*Relationship, error) {
 	if target == nil {
 		return nil, fmt.Errorf("target part cannot be nil")
 	}
@@ -33,11 +25,11 @@ func (rsc *rsContainer) AddRelationship(target *Part, rsType string, targetMode 
 	return rs, nil
 }
 
-func (rsc *rsContainer) RelationshipCount() int {
+func (rsc *RelationshipContainer) RelationshipCount() int {
 	return len(rsc.rss)
 }
 
-func (rsc *rsContainer) RelationshipByType(type_ string) []*Relationship {
+func (rsc *RelationshipContainer) RelationshipsByType(type_ string) []*Relationship {
 	var rs []*Relationship
 	for _, r := range rsc.rss {
 		if r.Type == type_ {
@@ -60,7 +52,7 @@ type relationshipXML struct {
 	Mode      string `xml:"TargetMode,attr,omitempty"`
 }
 
-func (rsc *rsContainer) decodeRelationships(r io.Reader, partName string) error {
+func (rsc *RelationshipContainer) decodeRelationships(r io.Reader, partName string) error {
 	relDecode := new(relationshipsXML)
 	if err := xml.NewDecoder(r).Decode(relDecode); err != nil {
 		return fmt.Errorf("opc: %s: cannot be decoded: %v", partName, err)

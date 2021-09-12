@@ -23,6 +23,15 @@ func TestPackageReader(t *testing.T) {
 	assert.NotNil(t, core.Keywords.Tags)
 	assert.Equal(t, "Tags1; Tags2", *core.Keywords.Tags)
 
+	file, err := reader.OpenEntry("word/webSettings.xml")
+	assert.NoError(t, err)
+	expected := 80
+	buffer := make([]byte, expected)
+	read, err := file.Read(buffer)
+	assert.NoError(t, err)
+	assert.Equal(t, expected, read)
+	assert.Contains(t, string(buffer), "w:webSettings")
+
 	p := reader.Package
 	reader = nil
 

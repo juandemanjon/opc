@@ -4,6 +4,7 @@ import (
 	"archive/zip"
 	"encoding/xml"
 	"fmt"
+	"io/fs"
 	"path/filepath"
 )
 
@@ -58,6 +59,14 @@ func (pr *PackageReader) Open() error {
 
 	pr.Package = p
 	return nil
+}
+
+func (pr *PackageReader) OpenEntry(name string) (fs.File, error) {
+	if pr.r == nil {
+		return nil, fmt.Errorf("package reader is not yet open")
+	}
+
+	return pr.r.Open(name)
 }
 
 func (pr *PackageReader) readRelationships(parent string, rss []*Relationship) {
